@@ -12,6 +12,7 @@ export default function App() {
   const [activeGesture, setActiveGesture] = useState<GestureKind | null>(null);
   const controller = useMemo(() => new GestureController(setActiveGesture), []);
   const socket = useGestureSocket(controller);
+  const [sidebarOpen, setSidebarOpen] = useState(true);
 
   const [model, setModel] = useState<LoadedModel | null>(null);
   const [loading, setLoading] = useState(false);
@@ -58,10 +59,32 @@ export default function App() {
           <h1>Aero<span>3D</span></h1>
         </div>
         <p className="tagline">Inspect 3D models with your hands — or your mouse.</p>
+        <div className="header-controls">
+          <label className="switch" htmlFor="sidebar-switch" title={sidebarOpen ? 'Hide sidebar (Full screen viewer)' : 'Show sidebar'}>
+            <span className="switch-label">
+              <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+                <rect width="18" height="18" x="3" y="3" rx="2" />
+                <path d="M9 3v18" />
+              </svg>
+              <span>Sidebar</span>
+            </span>
+            <input
+              id="sidebar-switch"
+              type="checkbox"
+              role="switch"
+              checked={sidebarOpen}
+              onChange={(e) => setSidebarOpen(e.target.checked)}
+              aria-controls="sidebar"
+            />
+            <span className="switch-track" aria-hidden="true">
+              <span className="switch-thumb" />
+            </span>
+          </label>
+        </div>
       </header>
 
-      <main className="app-main">
-        <aside className="sidebar">
+      <main className={`app-main${sidebarOpen ? '' : ' is-fullscreen'}`}>
+        <aside className="sidebar" id="sidebar" aria-hidden={!sidebarOpen}>
           <ModelUploader
             onFile={handleFile}
             loading={loading}
@@ -93,6 +116,8 @@ export default function App() {
           )}
 
           <ViewerToolbar
+            sidebarOpen={sidebarOpen}
+            onToggleSidebar={() => setSidebarOpen((prev) => !prev)}
             trackingRequested={socket.trackingRequested}
             trackingActive={trackingActive}
             onToggleTracking={socket.setTrackingRequested}
