@@ -55,6 +55,7 @@ Backend environment variables (all optional):
 | `GESTURE_CAMERA_INDEX` | `0` | Webcam index |
 | `GESTURE_TARGET_FPS` | `30` | Inference/event cadence cap |
 | `GESTURE_MODEL_PATH` | `backend/models/hand_landmarker.task` | Hand-landmarker model file |
+| `GESTURE_PREVIEW_WINDOW` | `1` | Show local desktop camera pop-up window with hand landmarks (1=on, 0=off) |
 
 Frontend: copy `frontend/.env.example` to `.env.local` and set `VITE_GESTURE_WS_URL` if needed.
 

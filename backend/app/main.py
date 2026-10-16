@@ -86,6 +86,7 @@ def create_app(
             tracker_factory=trk_factory,
             processor=GestureProcessor(GestureConfig(), seq_source=seq),
             target_fps=settings.target_fps,
+            preview_window=settings.preview_window,
         )
         send_task = asyncio.create_task(sender(ws, buffer))
         try:

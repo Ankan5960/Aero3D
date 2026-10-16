@@ -23,6 +23,7 @@ class Settings:
     model_path: Path = DEFAULT_MODEL_PATH
     max_message_bytes: int = 4096
     log_level: str = "INFO"
+    preview_window: bool = True
 
     @classmethod
     def from_env(cls) -> "Settings":
@@ -41,4 +42,5 @@ class Settings:
             target_fps=int(os.environ.get("GESTURE_TARGET_FPS", cls.target_fps)),
             model_path=Path(os.environ.get("GESTURE_MODEL_PATH", str(DEFAULT_MODEL_PATH))),
             log_level=os.environ.get("GESTURE_LOG_LEVEL", cls.log_level),
+            preview_window=os.environ.get("GESTURE_PREVIEW_WINDOW", "1") != "0",
         )

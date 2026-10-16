@@ -96,3 +96,25 @@ def test_tracker_unavailable_reports_error():
     time.sleep(0.2)
     svc.stop()
     assert any(m["type"] == "error" and m["code"] == "INTERNAL_ERROR" for m in msgs)
+
+
+def test_preview_window_draws_and_closes():
+    import numpy as np
+
+    class NumpyCamera:
+        def open(self): pass
+        def read(self):
+            return np.zeros((240, 320, 3), dtype=np.uint8)
+        def release(self): pass
+
+    svc = GestureService(
+        sink=lambda m: None,
+        camera_factory=NumpyCamera,
+        tracker_factory=lambda: FakeTracker([obs("open")]),
+        processor=GestureProcessor(),
+        preview_window=True,
+    )
+    # Direct test of _update_preview and _close_preview
+    frame = np.zeros((240, 320, 3), dtype=np.uint8)
+    svc._update_preview(frame, obs("open"))
+    svc._close_preview()
